@@ -111,4 +111,18 @@ public class MovimentacaoDAO {
             System.out.println("Erro ao deletar movimentação: " + e.getMessage());
         }
     }
+
+    //Metodo para deletar por material (necessario para conseguir deletar os materiais)
+    public void deletarPorMaterial(int idMaterial) {
+        String sql = "DELETE FROM movimentacao WHERE id_material=?";
+        try (Connection conn = ConexaoDB.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, idMaterial);
+            ps.executeUpdate();
+
+        } catch (SQLException e) {
+            System.out.println("Erro ao deletar movimentações do material: " + e.getMessage());
+        }
+    }
 }
