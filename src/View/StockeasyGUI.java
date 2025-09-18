@@ -1005,6 +1005,3 @@ class TelaPrincipal extends JFrame {
                 "Total de itens em estoque: " + total, "Total em Estoque", JOptionPane.INFORMATION_MESSAGE);
     }
 }
-
-// As classes DAO, Model e Controller permanecem as mesmas que você forneceu
-// ... (insira aqui as classes DAO, Model e Controller que você forneceu)
