@@ -7,10 +7,11 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class UsuarioController {
+    //Instanciando a classe UsuarioDAO para realizar as operações necessarias
     public UsuarioDAO usuarioDAO = new UsuarioDAO();
 
-    // --- Métodos de relevância ---
-
+    //Metodos de relevancia
+    //Metodo para validacao de login do usuario
     public boolean validarLogin(String email, String senha) {
         List<Usuario> usuarios = usuarioDAO.listarTodos();
         for (Usuario u : usuarios) {
@@ -20,8 +21,7 @@ public class UsuarioController {
         }
         return false;
     }
-
-    // 2) Criar novo usuário com validação
+    //Criar novo usuario com validacao
     public String criarUsuario(Usuario u) {
         if (u.getNome().trim().length() < 3) return "Nome muito curto!";
         if (!u.getEmail().contains("@")) return "Email inválido!";
@@ -30,12 +30,12 @@ public class UsuarioController {
         return "Usuário criado com sucesso!";
     }
 
-    // 3) Listar todos os usuários
+    //Listar todos os usuarios chamando o metodo da classe DAO
     public List<Usuario> listarUsuarios() {
         return usuarioDAO.listarTodos();
     }
 
-    // 4) Buscar usuário por email usando filtro da lista
+    //Buscar usuario por email usando filtro da classe DAO
     public Usuario buscarUsuarioPorEmail(String email) {
         List<Usuario> usuarios = usuarioDAO.listarTodos();
         for (Usuario u : usuarios) {

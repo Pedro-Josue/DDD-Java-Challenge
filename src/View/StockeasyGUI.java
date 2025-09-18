@@ -18,18 +18,20 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class StockeasyGUI {
+    //inicializacao da GUI
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             new TelaLogin().setVisible(true);
         });
     }
 }
-
+//classe da tela de login
 class TelaLogin extends JFrame {
     private JTextField txtEmail;
     private JPasswordField txtSenha;
     private UsuarioController usuarioController;
 
+    //metodo principal, chamando o controller e setando o Jframe
     public TelaLogin() {
         super("Login - Stockeasy");
         this.usuarioController = new UsuarioController();
@@ -41,13 +43,14 @@ class TelaLogin extends JFrame {
         setResizable(false);
     }
 
+    //metodo para inicializar a GUI de login
     private void initializeUI() {
         JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.insets = new Insets(5, 5, 5, 5);
         constraints.fill = GridBagConstraints.HORIZONTAL;
 
-        // Título
+        // Titulo
         JLabel lblTitulo = new JLabel("Stockeasy", JLabel.CENTER);
         lblTitulo.setFont(new Font("Arial", Font.BOLD, 16));
         constraints.gridx = 0;
@@ -78,7 +81,7 @@ class TelaLogin extends JFrame {
         constraints.gridy = 2;
         panel.add(txtSenha, constraints);
 
-        // Botões
+        // Botoes
         JButton btnLogin = new JButton("Login");
         JButton btnSair = new JButton("Sair");
         JButton btnCriarUsuario = new JButton("Criar Nova Conta");
@@ -93,17 +96,18 @@ class TelaLogin extends JFrame {
         constraints.gridwidth = 2;
         panel.add(panelBotoes, constraints);
 
-        // Ações dos botões
+        // Acoes dos botoes
         btnLogin.addActionListener(e -> realizarLogin());
         btnSair.addActionListener(e -> System.exit(0));
         btnCriarUsuario.addActionListener(e -> criarNovoUsuario());
 
-        // Enter pressionado no campo de senha também realiza login
+        //Enter pressionado no campo de senha também realiza o login
         txtSenha.addActionListener(e -> realizarLogin());
 
         add(panel);
     }
 
+    //Fluxo de criacao de novo usuario
     private void criarNovoUsuario() {
         JDialog dialog = new JDialog(this, "Criar Nova Conta", true);
         dialog.setSize(400, 300);
@@ -132,7 +136,7 @@ class TelaLogin extends JFrame {
             String senha = new String(txtSenha.getPassword());
             String confirmarSenha = new String(txtConfirmarSenha.getPassword());
 
-            // Validações
+            // Validacoes
             if (nome.isEmpty() || email.isEmpty() || senha.isEmpty()) {
                 JOptionPane.showMessageDialog(dialog, "Preencha todos os campos!", "Erro", JOptionPane.ERROR_MESSAGE);
                 return;
@@ -153,13 +157,13 @@ class TelaLogin extends JFrame {
                 return;
             }
 
-            // Verificar se email já existe
+            // Verificar se email ja existe
             if (usuarioController.buscarUsuarioPorEmail(email) != null) {
                 JOptionPane.showMessageDialog(dialog, "Este email já está em uso!", "Erro", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
-            // Criar novo usuário
+            // Criar novo usuario
             Usuario novoUsuario = new Usuario(0, nome, email, senha);
             String resultado = usuarioController.criarUsuario(novoUsuario);
 
@@ -184,30 +188,13 @@ class TelaLogin extends JFrame {
         dialog.setVisible(true);
     }
 
+    //metodo para realizacao de login
     private void realizarLogin() {
         String email = txtEmail.getText();
         String senha = new String(txtSenha.getPassword());
 
         if (email.isEmpty() || senha.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Preencha todos os campos!", "Erro", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        // Verificar se é o primeiro acesso (sem usuários no sistema)
-        List<Usuario> usuarios = usuarioController.listarUsuarios();
-        if (usuarios.isEmpty()) {
-            int resposta = JOptionPane.showConfirmDialog(this,
-                    "Nenhum usuário cadastrado. Deseja criar um usuário administrador?",
-                    "Primeiro Acesso", JOptionPane.YES_NO_OPTION);
-
-            if (resposta == JOptionPane.YES_OPTION) {
-                // Criar usuário admin padrão
-                Usuario admin = new Usuario(0, "Administrador", "admin@admin.com", "admin");
-                usuarioController.criarUsuario(admin);
-                JOptionPane.showMessageDialog(this,
-                        "Usuário administrador criado:\nEmail: admin@admin.com\nSenha: admin",
-                        "Usuário Criado", JOptionPane.INFORMATION_MESSAGE);
-            }
             return;
         }
 
@@ -223,10 +210,11 @@ class TelaLogin extends JFrame {
     }
 }
 
+//Classe da tela principal, apos o login
 class TelaPrincipal extends JFrame {
     private Usuario usuarioLogado;
 
-    // Controladores
+    // Instanciando os controllers
     private AlmoxarifadoController almoxarifadoController = new AlmoxarifadoController();
     private UsuarioController usuarioController = new UsuarioController();
     private CategoriaDAO categoriaDAO = new CategoriaDAO();
@@ -295,7 +283,7 @@ class TelaPrincipal extends JFrame {
         menuBar.add(menuRelatorios);
         menuBar.add(menuUsuario);
 
-        // Label com informações do usuário logado
+        // Label com informações do usuario logado
         lblUsuario = new JLabel("Usuário: " + usuarioLogado.getNome());
         menuBar.add(Box.createHorizontalGlue());
         menuBar.add(lblUsuario);
@@ -318,7 +306,7 @@ class TelaPrincipal extends JFrame {
         JPanel panelCategorias = criarPanelCategorias();
         tabbedPane.addTab("Categorias", panelCategorias);
 
-        // Aba de Usuários (apenas para administradores)
+        // Aba de usuarios (apenas para administradores)
         if (usuarioLogado.getEmail().equals("admin@admin.com")) { // Exemplo de verificação de admin
             JPanel panelUsuarios = criarPanelUsuarios();
             tabbedPane.addTab("Usuários", panelUsuarios);

@@ -6,12 +6,12 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class ConexaoDB {
-    //url do banco de dados
+    //url do banco de dados, utilizando postgres
     private static final String url = "jdbc:postgresql://localhost:5432/Stockeasy";
-    //variaveis para acesso ao banco
+    //variaveis para acesso ao banco, com credenciais de login explicitas
     private static final String username = "postgres";
     private static final String senha = "2580";
-    //criação da tabela de jogo
+    //criação da tabela das tabelas para a aplicacao (Categoria, Material, Usuario e Movimentacao)
     static {
         try (Connection connection = getConnection();
              Statement statement = connection.createStatement()){

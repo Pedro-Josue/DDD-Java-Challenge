@@ -8,7 +8,6 @@ public class Material {
     private String unidadeMedida;
     private Categoria categoria;
     //construtor
-
     public Material(int id, String nome, String descricao, int quantidadeEstoque, String unidadeMedida, Categoria categoria) {
         this.id = id;
         this.nome = nome;
